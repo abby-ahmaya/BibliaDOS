@@ -115,6 +115,20 @@ begin
   Write(S);
 end;
 
+procedure WriteAtPad(X, Y, W: Byte; S: String);
+var
+  outS: String;
+begin
+  if W = 0 then
+    Exit;
+  outS := S;
+  if Length(outS) > W then
+    outS := Copy(outS, 1, W);
+  while Length(outS) < W do
+    outS := outS + ' ';
+  WriteAt(X, Y, outS);
+end;
+
 function UpperStr(S: String): String;
 var
   i: Byte;
@@ -420,8 +434,7 @@ begin
       SetHilite
     else
       SetNormal;
-    ClearLine(Y);
-    WriteAt(2, Y, numS + ' (sem texto)');
+    WriteAtPad(2, Y, SCREEN_W - 1, numS + ' (sem texto)');
     Inc(Y);
     Exit;
   end;
@@ -471,8 +484,7 @@ begin
     else
       SetNormal;
 
-    ClearLine(Y);
-    WriteAt(2, Y, prefix + line);
+    WriteAtPad(2, Y, SCREEN_W - 1, prefix + line);
     Inc(Y);
 
     if (j <= VerseBufLen) and (lastSpace > 0) then
@@ -509,24 +521,20 @@ end;
 procedure DrawTitle(Title: String);
 begin
   SetTitle;
-  ClearLine(TITLE_Y);
-  WriteAt(2, TITLE_Y, Title);
+  WriteAtPad(2, TITLE_Y, SCREEN_W - 1, Title);
 end;
 
 procedure DrawFooter(L1, L2: String);
 begin
   SetTitle;
-  ClearLine(FOOT_Y1);
-  ClearLine(FOOT_Y2);
-  WriteAt(2, FOOT_Y1, L1);
-  WriteAt(2, FOOT_Y2, L2);
+  WriteAtPad(2, FOOT_Y1, SCREEN_W - 1, L1);
+  WriteAtPad(2, FOOT_Y2, SCREEN_W - 1, L2);
 end;
 
 procedure DrawInfo(Info: String);
 begin
   SetTitle;
-  ClearLine(INFO_Y);
-  WriteAt(2, INFO_Y, Info);
+  WriteAtPad(2, INFO_Y, SCREEN_W - 1, Info);
 end;
 
 procedure WaitAnyKey;
@@ -703,7 +711,7 @@ var
     ClrScr;
     DrawTitle('Biblia ACF (DOS)  |  Livros');
     DrawInfo('Enter: selecionar  |  ap 22 1: ir direto  |  F1: ajuda');
-    DrawFooter('Setas/PgUp/PgDn navega  |  Left/Right VT/NT  |  q sai', '');
+    DrawFooter('Setas/PgUp/PgDn navega  |  q sai', '');
     DrawHeader;
     DrawDivider;
     DrawJumpLine;
