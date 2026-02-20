@@ -1,7 +1,7 @@
-# Biblia ACF para DOS
+# Bíblia ACF para DOS
 
-Leitor da Biblia ACF em modo texto para DOS, feito em Turbo Pascal.
-O projeto usa dados binarios (`ACF.DAT`, `ACF.IDX`, `ACF.MET`) e executa no DOSBox-X/FreeDOS.
+Leitor da Bíblia ACF em modo texto para DOS, feito em Turbo Pascal.
+O projeto usa dados binários (`ACF.DAT`, `ACF.IDX`, `ACF.MET`) e executa no DOSBox-X/FreeDOS.
 
 ## Screenshots
 
@@ -16,9 +16,9 @@ O projeto usa dados binarios (`ACF.DAT`, `ACF.IDX`, `ACF.MET`) e executa no DOSB
 ## Estrutura principal
 
 - `BIBLIA.PAS`: fonte principal (Turbo Pascal)
-- `BIBLIA.EXE`: executavel DOS compilado
+- `BIBLIA.EXE`: executável DOS compilado
 - `make_dos_data.py`: gera `ACF.DAT`, `ACF.IDX`, `ACF.MET` a partir de JSON
-- `ACF.DAT` / `ACF.IDX` / `ACF.MET`: base de dados da Biblia
+- `ACF.DAT` / `ACF.IDX` / `ACF.MET`: base de dados da Bíblia
 - `START.BAT`: inicializa codepage/teclado e executa o leitor
 - `TP55/`: Turbo Pascal 5.5
 
@@ -30,7 +30,7 @@ No DOS (dentro do DOSBox-X), com os arquivos na mesma pasta:
 START.BAT
 ```
 
-Teste rapido de leitura de arquivos:
+Teste rápido de leitura de arquivos:
 
 ```dos
 BIBLIA.EXE /T
@@ -44,7 +44,7 @@ Dentro do DOSBox-X:
 TPC.EXE /B BIBLIA.PAS
 ```
 
-Tambem pode compilar direto no host chamando DOSBox-X:
+Também pode compilar direto no host chamando DOSBox-X:
 
 ```bash
 dosbox-x -fastlaunch -exit \
@@ -60,7 +60,7 @@ dosbox-x -fastlaunch -exit \
 python3 make_dos_data.py --json /caminho/para/acf_clean.json
 ```
 
-Saida esperada: `ACF.DAT`, `ACF.IDX`, `ACF.MET`.
+Saída esperada: `ACF.DAT`, `ACF.IDX`, `ACF.MET`.
 
 ## Teclas principais
 
@@ -70,22 +70,22 @@ Saida esperada: `ACF.DAT`, `ACF.IDX`, `ACF.MET`.
 - `F1`: ajuda
 - `Setas` / `PgUp` / `PgDn`: navegar
 - Livros: `Left/Right` alterna entre colunas VT/NT
-- Livros: digite `ap 22 1` e `Enter` para ir direto (livro/capitulo/verso)
-- Leitura: `Left/Right` muda capitulo
+- Livros: digite `ap 22 1` e `Enter` para ir direto (livro/capítulo/verso)
+- Leitura: `Left/Right` muda capítulo
 - Leitura: `g` vai para verso
 
 ## Acentos (CP850)
 
-Os dados estao em `CP850` (pt-BR). Se os acentos sairem errados, use codepage 850.
+Os dados estão em `CP850` (pt-BR). Se os acentos saírem errados, use codepage 850.
 
-O `START.BAT` ja aplica:
+O `START.BAT` já aplica:
 
 - `CHCP 850`
 - `KEYB BR 850`
 
 ## GitHub
 
-O repositorio ja esta inicializado em `main`. Para publicar:
+O repositório já está inicializado em `main`. Para publicar:
 
 ```bash
 git remote add origin https://github.com/SEU_USUARIO/SEU_REPO.git
