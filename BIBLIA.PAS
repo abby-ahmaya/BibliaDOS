@@ -430,10 +430,7 @@ begin
   if VerseBufLen = 0 then
   begin
     Str(VerseNum:3, numS);
-    if Highlight then
-      SetHilite
-    else
-      SetNormal;
+    SetNormal;
     WriteAtPad(2, Y, SCREEN_W - 1, numS + ' (sem texto)');
     Inc(Y);
     Exit;
@@ -479,10 +476,7 @@ begin
 
     line := MakeLine(i, endPos);
 
-    if Highlight then
-      SetHilite
-    else
-      SetNormal;
+    SetNormal;
 
     WriteAtPad(2, Y, SCREEN_W - 1, prefix + line);
     Inc(Y);
@@ -1485,8 +1479,12 @@ var
   end;
 
   procedure DrawPage;
+  var
+    yy: Byte;
   begin
     ClearVerseMap;
+    for yy := CONTENT_Y to CONTENT_Y2 do
+      WriteAt(1, yy, ' ');
     y := CONTENT_Y;
     v := TopVerse;
     pageVisibleTo := TopVerse;
@@ -1498,7 +1496,7 @@ var
       globalIdx := ChapStart[chapId] + (v - 1);
       if ReadVerse(globalIdx) then
       begin
-        DrawVerse(v, v = CurVerse, y);
+        DrawVerse(v, False, y);
         pageVisibleTo := v;
       end
       else
@@ -1519,7 +1517,7 @@ var
     DrawScroll;
   end;
 
-  procedure RedrawVerseOnly(VerseNum: Word; Highlight: Boolean);
+  procedure DrawVerseMarker(VerseNum: Word; Selected: Boolean);
   var
     yy: Byte;
   begin
@@ -1530,9 +1528,11 @@ var
     yy := VerseYStart[VerseNum];
     if yy = 0 then
       Exit;
-    globalIdx := ChapStart[chapId] + (VerseNum - 1);
-    if ReadVerse(globalIdx) then
-      DrawVerse(VerseNum, Highlight, yy);
+    SetTitle;
+    if Selected then
+      WriteAt(1, yy, '>')
+    else
+      WriteAt(1, yy, ' ');
   end;
 begin
   needFullRedraw := True;
@@ -1556,6 +1556,7 @@ begin
       DrawStatic;
       DrawInfoLine;
       DrawPage;
+      DrawVerseMarker(CurVerse, True);
       prevBook := CurBook;
       prevChap := CurChap;
       prevTopVerse := TopVerse;
@@ -1566,14 +1567,15 @@ begin
     begin
       DrawInfoLine;
       DrawPage;
+      DrawVerseMarker(CurVerse, True);
       prevTopVerse := TopVerse;
       prevCurVerse := CurVerse;
     end
     else if CurVerse <> prevCurVerse then
     begin
       DrawInfoLine;
-      RedrawVerseOnly(prevCurVerse, False);
-      RedrawVerseOnly(CurVerse, True);
+      DrawVerseMarker(prevCurVerse, False);
+      DrawVerseMarker(CurVerse, True);
       prevCurVerse := CurVerse;
       DrawScroll;
     end;
