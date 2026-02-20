@@ -7,7 +7,7 @@ O projeto usa dados binarios (`ACF.DAT`, `ACF.IDX`, `ACF.MET`) e executa no DOSB
 
 ### Tela de livros
 
-![Tela de livros](screenshots/biblia_003.png)
+![Tela de livros](screenshots/biblia_000.png)
 
 ### Tela de leitura
 
