@@ -1436,6 +1436,7 @@ var
   prevTopVerse: Word;
   prevCurVerse: Word;
   pageVisibleTo: Word;
+  infoVerseX: Byte;
   VerseYStart: array[1..MAX_CHAP_VERSES] of Byte;
 
   procedure DrawStatic;
@@ -1465,9 +1466,20 @@ var
   begin
     Str(CurChap:0, n1);
     Str(verseCount:0, n2);
-    Str(CurVerse:0, n3);
-    info := BookLabel(CurBook) + '  Capitulo ' + n1 + '  Verso ' + n3 + '/' + n2;
+    info := BookLabel(CurBook) + '  Capitulo ' + n1 + '  Verso ';
     DrawInfo(info);
+    infoVerseX := 2 + Length(info);
+  end;
+
+  procedure DrawInfoVerse;
+  begin
+    Str(CurVerse:0, n3);
+    if infoVerseX < 2 then
+      infoVerseX := 2;
+    if infoVerseX > SCREEN_W then
+      infoVerseX := SCREEN_W;
+    SetTitle;
+    WriteAtPad(infoVerseX, INFO_Y, SCREEN_W - infoVerseX + 1, n3 + '/' + n2);
   end;
 
   procedure ClearVerseMap;
@@ -1528,7 +1540,7 @@ var
     yy := VerseYStart[VerseNum];
     if yy = 0 then
       Exit;
-    SetTitle;
+    SetNormal;
     if Selected then
       WriteAt(1, yy, '>')
     else
@@ -1555,6 +1567,7 @@ begin
     begin
       DrawStatic;
       DrawInfoLine;
+      DrawInfoVerse;
       DrawPage;
       DrawVerseMarker(CurVerse, True);
       prevBook := CurBook;
@@ -1566,6 +1579,7 @@ begin
     else if TopVerse <> prevTopVerse then
     begin
       DrawInfoLine;
+      DrawInfoVerse;
       DrawPage;
       DrawVerseMarker(CurVerse, True);
       prevTopVerse := TopVerse;
@@ -1573,7 +1587,7 @@ begin
     end
     else if CurVerse <> prevCurVerse then
     begin
-      DrawInfoLine;
+      DrawInfoVerse;
       DrawVerseMarker(prevCurVerse, False);
       DrawVerseMarker(CurVerse, True);
       prevCurVerse := CurVerse;
