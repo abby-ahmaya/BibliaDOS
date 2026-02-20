@@ -1,81 +1,93 @@
-# Biblia ACF para DOS (EXE)
+# Biblia ACF para DOS
 
-Este diretorio contem uma versao "DOS de verdade" (Turbo Pascal) do leitor da Biblia ACF, com fundo azul.
+Leitor da Biblia ACF em modo texto para DOS, feito em Turbo Pascal.
+O projeto usa dados binarios (`ACF.DAT`, `ACF.IDX`, `ACF.MET`) e executa no DOSBox-X/FreeDOS.
 
-Arquivos:
+## Screenshots
 
-- `BIBLIA.PAS`: fonte Turbo Pascal
-- `make_dos_data.py`: gera `ACF.DAT`, `ACF.IDX`, `ACF.MET` a partir do `acf_clean.json`
-- `ACF.DAT` / `ACF.IDX` / `ACF.MET`: dados (binario)
-- `BIBLIA.EXE`: executavel DOS (gerado)
+### Tela de livros
 
-## Gerar os dados
+![Tela de livros](screenshots/biblia_003.png)
 
-```bash
-cd ~/Downloads/SaturnBible/dos_biblia_acf_dos
-python3 make_dos_data.py --json ../acf_clean.json
-```
+### Tela de leitura
 
-Saida: `ACF.DAT`, `ACF.IDX`, `ACF.MET`.
+![Tela de leitura](screenshots/biblia_000.raw1.png)
 
-## Compilar o EXE (Turbo Pascal dentro do DOSBox-X)
+## Estrutura principal
 
-O build automatico foi feito via `dosbox-x` com o compilador Turbo Pascal 5.5 (freeware) baixado do "Museum" da Embarcadero.
+- `BIBLIA.PAS`: fonte principal (Turbo Pascal)
+- `BIBLIA.EXE`: executavel DOS compilado
+- `make_dos_data.py`: gera `ACF.DAT`, `ACF.IDX`, `ACF.MET` a partir de JSON
+- `ACF.DAT` / `ACF.IDX` / `ACF.MET`: base de dados da Biblia
+- `START.BAT`: inicializa codepage/teclado e executa o leitor
+- `TP55/`: Turbo Pascal 5.5
 
-Build (automatizado neste repo):
+## Rodar no DOSBox-X
 
-```bash
-bash /home/pi/compile.sh dos-build /home/pi/Downloads/SaturnBible/acf_clean.json
-```
-
-No `dosbox-x`, compile com `TPC.EXE`:
-
-```dos
-TPC.EXE /B BIBLIA.PAS
-```
-
-Isso gera `BIBLIA.EXE`.
-
-## Rodar
-
-Coloque `BIBLIA.EXE`, `ACF.DAT`, `ACF.IDX`, `ACF.MET` na mesma pasta e rode no DOSBox/FreeDOS:
+No DOS (dentro do DOSBox-X), com os arquivos na mesma pasta:
 
 ```dos
 START.BAT
 ```
 
-Teste rapido:
+Teste rapido de leitura de arquivos:
 
 ```dos
 BIBLIA.EXE /T
 ```
 
-## Teclas
+## Compilar o EXE (Turbo Pascal 5.5)
+
+Dentro do DOSBox-X:
+
+```dos
+TPC.EXE /B BIBLIA.PAS
+```
+
+Tambem pode compilar direto no host chamando DOSBox-X:
+
+```bash
+dosbox-x -fastlaunch -exit \
+  -c "mount c /home/pi/dos_biblia" \
+  -c "c:" \
+  -c "cd \\" \
+  -c "TP55\\TPC.EXE /B BIBLIA.PAS"
+```
+
+## Gerar os dados ACF
+
+```bash
+python3 make_dos_data.py --json /caminho/para/acf_clean.json
+```
+
+Saida esperada: `ACF.DAT`, `ACF.IDX`, `ACF.MET`.
+
+## Teclas principais
 
 - `Enter`: selecionar
 - `ESC` / `b`: voltar
 - `q`: sair
 - `F1`: ajuda
 - `Setas` / `PgUp` / `PgDn`: navegar
-- Menu de livros: `Left/Right` alterna `VT/NT`
-- Menu de livros: digite `ap 22 1` e `Enter` para ir direto (livro/cap/verso)
-- Leitura: `Left/Right` muda capitulo, `g` vai para verso
+- Livros: `Left/Right` alterna entre colunas VT/NT
+- Livros: digite `ap 22 1` e `Enter` para ir direto (livro/capitulo/verso)
+- Leitura: `Left/Right` muda capitulo
+- Leitura: `g` vai para verso
 
-## Acentos (importante)
+## Acentos (CP850)
 
-Os textos foram gerados em `CP850` (pt-BR). Se os acentos sairem errados, configure o DOSBox-X para usar codepage 850.
+Os dados estao em `CP850` (pt-BR). Se os acentos sairem errados, use codepage 850.
 
-No DOSBox-X, por padrao a codepage costuma ser 437. O `START.BAT` ja faz:
+O `START.BAT` ja aplica:
 
 - `CHCP 850`
 - `KEYB BR 850`
 
-## Publicar no GitHub
+## GitHub
 
-Depois do commit inicial local, conecte seu repositorio remoto e envie:
+O repositorio ja esta inicializado em `main`. Para publicar:
 
 ```bash
 git remote add origin https://github.com/SEU_USUARIO/SEU_REPO.git
-git branch -M main
 git push -u origin main
 ```
