@@ -1,0 +1,15 @@
+# DOS/Turbo Pascal runtime/build noise
+*.LOG
+*.log
+*.BAK
+*.TMP
+*.SWP
+*.~*
+*.o
+*.ppu
+
+# DOSBox captures/temp
+*.CAP
+
+# Local validation binary (FreePascal)
+BIBLIA
